@@ -1,6 +1,4 @@
-// sw.js - This file needs to be in the root of the directory to work,
-//         so do not move it next to the other scripts
-
+// sw.js
 const CACHE_NAME = 'lab-8-starter';
 const RECIPE_URLS = [
   'https://adarsh249.github.io/Lab8-Starter/recipes/1_50-thanksgiving-side-dishes.json',
@@ -11,7 +9,6 @@ const RECIPE_URLS = [
   'https://adarsh249.github.io/Lab8-Starter/recipes/6_one-pot-thanksgiving-dinner.json'
 ];
 
-// Install the service worker and add URLs to cache
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
@@ -20,13 +17,10 @@ self.addEventListener('install', function(event) {
   );
 });
 
-
-// Activates the service worker
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', function(event) {
   event.waitUntil(self.clients.claim());
 });
 
-// Intercept fetch requests and cache them
 self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.open(CACHE_NAME).then(function(cache) {
@@ -39,3 +33,14 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(error) {
+      console.error('ServiceWorker registration failed: ', error);
+    });
+  });
+}
